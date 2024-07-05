@@ -1,0 +1,23 @@
+[tool.poetry]
+name = "usos-api"
+version = "0.1.0"
+description = "Asynchronous USOS API for Python"
+authors = ["Antoni-Czaplicki <56671347+Antoni-Czaplicki@users.noreply.github.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+aiohttp = "^3.9.5"
+pydantic = "^2.8.2"
+oauthlib = "^3.2.2"
+dotenv = "^1.0.1"
+
+[tool.poetry.group.dev.dependencies]
+black = "^24.4.2"
+isort = "^6.0.0b2"
+ruff = "^0.5.1"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

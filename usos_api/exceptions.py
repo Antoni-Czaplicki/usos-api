@@ -1,0 +1,2 @@
+class USOSAPIException(Exception):
+    pass
