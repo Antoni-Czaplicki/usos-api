@@ -1,9 +1,12 @@
 [tool.poetry]
 name = "usos-api"
-version = "0.1.0"
+version = "0.1.1"
 description = "Asynchronous USOS API for Python"
 authors = ["Antoni-Czaplicki <56671347+Antoni-Czaplicki@users.noreply.github.com>"]
 readme = "README.md"
+homepage = "https://github.com/Antoni-Czaplicki/usos-api"
+repository = "https://github.com/Antoni-Czaplicki/usos-api"
+documentation = "https://usos-api.readthedocs.io"
 
 [tool.poetry.dependencies]
 python = "^3.12"

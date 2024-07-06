@@ -32,47 +32,7 @@ async def fetch_data(api_base_address: str, consumer_key: str, consumer_secret: 
 
             user = await client.user_service.get_user()
             if user:
-                fields = [
-                    "id",
-                    "first_name",
-                    "middle_names",
-                    "last_name",
-                    "previous_names",
-                    "sex",
-                    "titles",
-                    "student_status",
-                    "staff_status",
-                    "email_access",
-                    "email",
-                    "email_url",
-                    "has_email",
-                    "homepage_url",
-                    "profile_url",
-                    "phone_numbers",
-                    "mobile_numbers",
-                    "office_hours",
-                    "interests",
-                    "has_photo",
-                    "photo_urls",
-                    "student_number",
-                    "pesel",
-                    "birth_date",
-                    "revenue_office_id",
-                    "citizenship",
-                    "room",
-                    "student_programmes",
-                    "employment_functions",
-                    "employment_positions",
-                    "course_editions_conducted",
-                    "postal_addresses",
-                    "alt_email",
-                    "can_i_debug",
-                    "external_ids",
-                    "phd_student_status",
-                    "library_card_id",
-                ]
-                for field in fields:
-                    print(f"{field}: {getattr(user, field)}")
+                print(user)
             else:
                 print("User not found")
 

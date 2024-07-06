@@ -75,7 +75,7 @@ Here's a basic example of how to use the USOS API to fetch user data:
 
    async with USOSClient(api_base_address, consumer_key, consumer_secret) as client:
        load_access_token("access_token", "access_token_secret")
-       user = await client.get_user()
+       user = await client.user_service.get_user()
        print(user)
 
 
@@ -88,7 +88,7 @@ You can also use the USOSClient without the context manager, but remember to clo
    client = USOSClient(api_base_address, consumer_key, consumer_secret)
    await client.open()
    load_access_token("access_token", "access_token_secret")
-   user = await client.get_user()
+   user = await client.user_service.get_user()
    print(user)
    await client.close()
 
