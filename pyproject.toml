@@ -10,7 +10,7 @@ python = "^3.12"
 aiohttp = "^3.9.5"
 pydantic = "^2.8.2"
 oauthlib = "^3.2.2"
-dotenv = "^1.0.1"
+python-dotenv = "^1.0.1"
 
 [tool.poetry.group.dev.dependencies]
 black = "*"
