@@ -8,9 +8,3 @@ class LangDict(BaseModel):
 
     pl: str | None = None
     en: str | None = None
-
-    def __repr__(self):
-        """
-        Return a string representation of the LangDict.
-        """
-        return f"LangDict(pl={self.pl}, en={self.en})"

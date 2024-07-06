@@ -13,11 +13,19 @@ from .lang_dict import LangDict
 
 
 class CourseAttribute(BaseModel):
+    """
+    Class representing a course attribute.
+    """
+
     name: LangDict | None = None
     values: List[LangDict] | None = None
 
 
 class Course(BaseModel):
+    """
+    Class representing a course.
+    """
+
     id: str | None = None
     name: LangDict | None = None
     homepage_url: str | None = None
@@ -60,6 +68,10 @@ class CourseEdition(BaseModel):
 
 
 class CourseEditionConducted(BaseModel):
+    """
+    Class representing a conducted course edition.
+    """
+
     id: str | None = None
     course: Course | None = None
     term: Term | None = None

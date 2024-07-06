@@ -10,6 +10,10 @@ _LOGGER = get_logger("AuthManager")
 
 
 class AuthManager:
+    """
+    A manager for the USOS API authentication.
+    """
+
     REQUEST_TOKEN_SUFFIX = "services/oauth/request_token"
     AUTHORIZE_SUFFIX = "services/oauth/authorize"
     ACCESS_TOKEN_SUFFIX = "services/oauth/access_token"
@@ -17,6 +21,13 @@ class AuthManager:
     SCOPES = "|".join(["offline_access", "studies"])
 
     def __init__(self, api_base_address: str, consumer_key: str, consumer_secret: str):
+        """
+        Initialize the authentication manager.
+
+        :param api_base_address: The base address of the USOS API.
+        :param consumer_key: Consumer key obtained from the USOS API.
+        :param consumer_secret: Consumer secret obtained from the USOS API.
+        """
         self.base_address = api_base_address.rstrip("/") + "/"
         self.consumer_key = consumer_key
         self.consumer_secret = consumer_secret
@@ -26,29 +37,54 @@ class AuthManager:
         self._oauth_client = Client(consumer_key, consumer_secret)
 
     async def __aenter__(self) -> "AuthManager":
+        """
+        Enter the manager.
+
+        :return: The manager.
+        """
         await self.open()
         return self
 
     async def __aexit__(self, exc_type, exc_value, traceback):
+        """
+        Exit the manager.
+
+        :param exc_type: The exception type.
+        :param exc_value: The exception value.
+        :param traceback: The traceback.
+        """
         await self.close()
 
     async def open(self):
+        """
+        Open the manager.
+        """
         self._session = aiohttp.ClientSession()
 
     async def close(self):
+        """
+        Close the manager.
+        """
         if self._session:
             await self._session.close()
 
     async def _generate_request_token(self, callback_url: str) -> None:
+        """
+        Generate a new request token.
+
+        :param callback_url:
+        """
         url = f"{self.base_address}{self.REQUEST_TOKEN_SUFFIX}"
         params = {
             "oauth_callback": callback_url,
             "scopes": self.SCOPES,
         }
         headers = {"Content-Type": "application/x-www-form-urlencoded"}
-        url, headers, body = self._oauth_client.sign(
+        url, headers, body = Client(
+            self.consumer_key, client_secret=self.consumer_secret
+        ).sign(
             url, http_method="POST", body=params, headers=headers
-        )
+        )  # Use a new client to avoid using the access token if it's set
         async with self._session.post(url, data=body, headers=headers) as response:
             await self._handle_response_errors(response)
             data = dict(urllib.parse.parse_qsl(await response.text()))
@@ -59,30 +95,40 @@ class AuthManager:
             _LOGGER.info(f"New request token generated: {self._request_token}")
 
     async def get_authorization_url(self, callback_url: str) -> str:
+        """
+        Get the authorization URL.
+
+        :param callback_url: The callback URL.
+        """
         await self._generate_request_token(callback_url)
         return f"{self.base_address}{self.AUTHORIZE_SUFFIX}?oauth_token={self._request_token}"
 
-    async def authorize_with_token(self, token: str):
+    async def authorize_with_token(self, token: str) -> tuple[str, str]:
+        """
+        Authorize the client with a token.
+
+        :param token: The token to authorize the client with.
+        :return: The access token and secret.
+        """
         self._oauth_client.verifier = token
         url = f"{self.base_address}{self.ACCESS_TOKEN_SUFFIX}"
         url, headers, body = self._oauth_client.sign(url, http_method="POST")
         async with self._session.post(url, data=body, headers=headers) as response:
             await self._handle_response_errors(response)
             data = dict(urllib.parse.parse_qsl(await response.text()))
-            self.access_token = data["oauth_token"]
-            self.access_token_secret = data["oauth_token_secret"]
-            self._oauth_client = Client(
-                self.consumer_key,
-                client_secret=self.consumer_secret,
-                resource_owner_key=self.access_token,
-                resource_owner_secret=self.access_token_secret,
-            )
+            self.load_access_token(data["oauth_token"], data["oauth_token_secret"])
             _LOGGER.info(
                 f"Authorization successful, received access token: {self.access_token}"
             )
             return self.access_token, self.access_token_secret
 
-    async def load_access_token(self, access_token: str, access_token_secret: str):
+    def load_access_token(self, access_token: str, access_token_secret: str):
+        """
+        Load the access token and secret into the manager.
+
+        :param access_token: The access token.
+        :param access_token_secret: The access token secret.
+        """
         self.access_token = access_token
         self.access_token_secret = access_token_secret
         self._oauth_client = Client(
@@ -92,7 +138,17 @@ class AuthManager:
             resource_owner_secret=self.access_token_secret,
         )
 
-    async def sign_request(self, url: str, http_method: str = "GET", **kwargs):
+    def sign_request(
+        self, url: str, http_method: str = "GET", **kwargs
+    ) -> tuple[str, dict, dict]:
+        """
+        Sign a request with the OAuth client.
+
+        :param url: The URL to sign.
+        :param http_method: The HTTP method to use.
+        :param kwargs: Additional parameters to pass.
+        :return: The signed URL, headers, and body.
+        """
         if not self.access_token:
             raise USOSAPIException("Access token not set. Did you forget to authorize?")
         url, headers, body = self._oauth_client.sign(
@@ -101,6 +157,12 @@ class AuthManager:
         return url, headers, body
 
     async def _handle_response_errors(self, response: aiohttp.ClientResponse):
+        """
+        Handle errors in the response.
+
+        :param response: The response to handle.
+        :raises USOSAPIException: If an error occurred.
+        """
         if response.status != 200:
             text = await response.text()
             if response.status == 401:
@@ -116,6 +178,9 @@ class AuthManager:
                 raise USOSAPIException(f"HTTP {response.status}: {text}")
 
     async def _revoke_token(self):
+        """
+        Revoke the current access token.
+        """
         url = f"{self.base_address}{self.REVOKE_TOKEN_SUFFIX}"
         url, headers, body = self._oauth_client.sign(url, http_method="POST")
         async with self._session.post(url, data=body, headers=headers) as response:
@@ -123,6 +188,9 @@ class AuthManager:
             _LOGGER.info("Token revoked successfully.")
 
     async def logout(self):
+        """
+        Log out the user.
+        """
         if not self.access_token:
             return
         await self._revoke_token()

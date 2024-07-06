@@ -13,10 +13,18 @@ oauthlib = "^3.2.2"
 dotenv = "^1.0.1"
 
 [tool.poetry.group.dev.dependencies]
-black = "^24.4.2"
-isort = "^6.0.0b2"
-ruff = "^0.5.1"
+black = "*"
+isort = "*"
+ruff = "*"
 
+[tool.poetry.group.docs]
+optional = true
+
+[tool.poetry.group.docs.dependencies]
+sphinx = "*"
+sphinx_rtd_theme = "*"
+readthedocs-sphinx-search = "*"
+sphinx-autodoc-typehints = "*"
 
 [build-system]
 requires = ["poetry-core"]

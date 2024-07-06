@@ -10,7 +10,7 @@ if TYPE_CHECKING:
 
 class Group(BaseModel):
     course_unit_id: str | None = None
-    group_number: str | None = None
+    group_number: int | None = None
     class_type: LangDict | None = None
     class_type_id: str | None = None
     group_url: str | None = None

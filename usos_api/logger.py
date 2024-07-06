@@ -2,6 +2,12 @@ import logging
 
 
 def get_logger(name: str) -> logging.Logger:
+    """
+    Get a logger with the specified name.
+
+    :param name: The name of the logger.
+    :return: The logger.
+    """
     logger = logging.getLogger(name)
     if not logger.handlers:
         handler = logging.StreamHandler()

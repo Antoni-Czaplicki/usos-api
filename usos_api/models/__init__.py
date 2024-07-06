@@ -1,3 +1,4 @@
+from .consumer import Consumer
 from .course import Course, CourseAttribute, CourseEdition, CourseEditionConducted
 from .grade import Grade
 from .group import Group
@@ -48,4 +49,5 @@ __all__ = [
     "Course",
     "CourseEditionConducted",
     "Term",
+    "Consumer",
 ]
