@@ -95,13 +95,19 @@ class AuthManager:
             self._oauth_client.resource_owner_secret = self._request_token_secret
             _LOGGER.info(f"New request token generated: {self._request_token}")
 
-    async def get_authorization_url(self, callback_url: str) -> str:
+    async def get_authorization_url(
+        self, callback_url: str, confirm_user: bool = False
+    ) -> str:
         """
         Get the authorization URL.
 
         :param callback_url: The callback URL.
+        :param confirm_user: Whether to confirm the user.
+        :return: The authorization URL.
         """
         await self._generate_request_token(callback_url)
+        if confirm_user:
+            return f"{self.base_address}{self.AUTHORIZE_SUFFIX}?oauth_token={self._request_token}&interactivity=confirm_user"
         return f"{self.base_address}{self.AUTHORIZE_SUFFIX}?oauth_token={self._request_token}"
 
     async def authorize(self, verifier: str, request_token, request_token_secret):

@@ -111,14 +111,19 @@ class USOSClient:
             verifier, request_token, request_token_secret
         )
 
-    async def get_authorization_url(self, callback_url: str = "oob"):
+    async def get_authorization_url(
+        self, callback_url: str = "oob", confirm_user: bool = False
+    ) -> str:
         """
         Get the URL to authorize the client.
 
         :param callback_url: The URL to redirect to after authorization, leave as "oob" for pin-based authorization.
+        :param confirm_user: Whether to confirm the user before authorizing the client.
         :return: The URL to authorize the client.
         """
-        return await self.connection.auth_manager.get_authorization_url(callback_url)
+        return await self.connection.auth_manager.get_authorization_url(
+            callback_url, confirm_user
+        )
 
     def load_access_token(self, access_token: str, access_token_secret: str):
         """
