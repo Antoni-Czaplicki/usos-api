@@ -26,8 +26,8 @@ async def fetch_data(api_base_address: str, consumer_key: str, consumer_secret: 
                 print("Please visit the following URL to authorize the client:")
                 client.set_scopes(["studies", "photo"])
                 print(await client.get_authorization_url())
-                token = input("Enter the PIN: ")
-                await client.authorize(token)
+                verifier = input("Enter the PIN: ")
+                await client.authorize(verifier)
                 await client.save_access_token_to_file()
 
             user = await client.user_service.get_user()

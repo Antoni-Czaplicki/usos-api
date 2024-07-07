@@ -94,14 +94,18 @@ class USOSClient:
             [s for s in self.connection.auth_manager.SCOPES.split("|") if s != scope]
         )
 
-    async def authorize(self, token: str) -> tuple[str, str]:
+    async def authorize(self, verifier: str, request_token: str = None, request_token_secret: str = None) -> tuple[str, str]:
         """
-        Authorize the client with a token.
+        Authorize the client with verifier and optionally token and token secret.
 
-        :param token: The token to authorize the client with.
+        Parameters `token` and `token_secret` can be useful when you create a new client instance and want to authorize it with the token and secret obtained from another client instance.
+
+        :param verifier: The verifier to authorize the client with.
+        :param request_token: The OAuth token obtained from the previous step.
+        :param request_token_secret: The OAuth token secret obtained from the previous step.
         :return: The access token and secret.
         """
-        return await self.connection.auth_manager.authorize_with_token(token)
+        return await self.connection.auth_manager.authorize(verifier, request_token, request_token_secret)
 
     async def get_authorization_url(self, callback_url: str = "oob"):
         """
@@ -160,9 +164,10 @@ class USOSClient:
         """
         if not file_path.endswith(".json"):
             raise ValueError("File must be a JSON file.")
+        access_token, access_token_secret = self.connection.auth_manager.get_access_token()
         json_data = {
-            "access_token": self.connection.auth_manager.access_token,
-            "access_token_secret": self.connection.auth_manager.access_token_secret,
+            "access_token": access_token,
+            "access_token_secret": access_token_secret,
         }
         with open(file_path, "w") as file:
             json.dump(json_data, file)

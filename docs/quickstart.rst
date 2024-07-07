@@ -61,8 +61,8 @@ The USOS API uses OAuth 1.0a for authentication. The ``USOSClient`` class provid
 
    async with USOSClient(api_base_address, consumer_key, consumer_secret) as client:
        print(await client.get_authorization_url()) # Open this URL in your browser, by default no callback URL is needed and you can just copy the PIN from the page you are redirected to
-       token = input("Enter the PIN: ")
-       await client.authorize(token)
+       verifier = input("Enter the PIN: ")
+       await client.authorize(verifier)
 
 Basic Usage
 -----------

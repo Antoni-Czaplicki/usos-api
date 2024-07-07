@@ -103,24 +103,37 @@ class AuthManager:
         await self._generate_request_token(callback_url)
         return f"{self.base_address}{self.AUTHORIZE_SUFFIX}?oauth_token={self._request_token}"
 
-    async def authorize_with_token(self, token: str) -> tuple[str, str]:
+    async def authorize(self, verifier: str, request_token, request_token_secret):
         """
-        Authorize the client with a token.
+        Authorize the client with verifier and optionally token and token secret.
 
-        :param token: The token to authorize the client with.
+        :param verifier: The verifier to authorize the client with.
+        :param token: The OAuth token obtained from the previous step.
+        :param token_secret: The OAuth token secret obtained from the previous step.
         :return: The access token and secret.
         """
-        self._oauth_client.verifier = token
+        self._oauth_client.verifier = verifier
+        if request_token:
+            self._oauth_client.resource_owner_key = request_token
+        if request_token_secret:
+            self._oauth_client.resource_owner_secret = request_token_secret
         url = f"{self.base_address}{self.ACCESS_TOKEN_SUFFIX}"
         url, headers, body = self._oauth_client.sign(url, http_method="POST")
-        async with self._session.post(url, data=body, headers=headers) as response:
-            await self._handle_response_errors(response)
-            data = dict(urllib.parse.parse_qsl(await response.text()))
-            self.load_access_token(data["oauth_token"], data["oauth_token_secret"])
-            _LOGGER.info(
-                f"Authorization successful, received access token: {self.access_token}"
-            )
-            return self.access_token, self.access_token_secret
+        try:
+            async with self._session.post(url, data=body, headers=headers) as response:
+                await self._handle_response_errors(response)
+                data = dict(urllib.parse.parse_qsl(await response.text()))
+                self.load_access_token(data["oauth_token"], data["oauth_token_secret"])
+                _LOGGER.info(
+                    f"Authorization successful, received access token: {self.access_token}"
+                )
+                return self.access_token, self.access_token_secret
+        except AttributeError as e:
+            if e.args[0] == "'NoneType' object has no attribute 'post'":
+                raise USOSAPIException(
+                    "Authorization failed. Did you forget to open the manager?"
+                )
+            raise
 
     def load_access_token(self, access_token: str, access_token_secret: str):
         """
@@ -137,6 +150,12 @@ class AuthManager:
             resource_owner_key=self.access_token,
             resource_owner_secret=self.access_token_secret,
         )
+
+    def get_access_token(self):
+        return self.access_token, self.access_token_secret
+
+    def get_request_token(self):
+        return self._request_token, self._request_token_secret
 
     def sign_request(
         self, url: str, http_method: str = "GET", **kwargs
