@@ -94,7 +94,9 @@ class USOSClient:
             [s for s in self.connection.auth_manager.SCOPES.split("|") if s != scope]
         )
 
-    async def authorize(self, verifier: str, request_token: str = None, request_token_secret: str = None) -> tuple[str, str]:
+    async def authorize(
+        self, verifier: str, request_token: str = None, request_token_secret: str = None
+    ) -> tuple[str, str]:
         """
         Authorize the client with verifier and optionally token and token secret.
 
@@ -105,7 +107,9 @@ class USOSClient:
         :param request_token_secret: The OAuth token secret obtained from the previous step.
         :return: The access token and secret.
         """
-        return await self.connection.auth_manager.authorize(verifier, request_token, request_token_secret)
+        return await self.connection.auth_manager.authorize(
+            verifier, request_token, request_token_secret
+        )
 
     async def get_authorization_url(self, callback_url: str = "oob"):
         """
@@ -164,7 +168,9 @@ class USOSClient:
         """
         if not file_path.endswith(".json"):
             raise ValueError("File must be a JSON file.")
-        access_token, access_token_secret = self.connection.auth_manager.get_access_token()
+        access_token, access_token_secret = (
+            self.connection.auth_manager.get_access_token()
+        )
         json_data = {
             "access_token": access_token,
             "access_token_secret": access_token_secret,

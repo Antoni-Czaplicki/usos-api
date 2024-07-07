@@ -31,6 +31,7 @@ class UserService:
                 "id",
                 "first_name",
                 "last_name",
+                "sex",
                 "email",
                 "student_number",
                 "student_programmes",

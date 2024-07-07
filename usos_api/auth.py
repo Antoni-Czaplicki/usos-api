@@ -18,6 +18,7 @@ class AuthManager:
     AUTHORIZE_SUFFIX = "services/oauth/authorize"
     ACCESS_TOKEN_SUFFIX = "services/oauth/access_token"
     REVOKE_TOKEN_SUFFIX = "services/oauth/revoke_token"
+    # List of available scopes can be found at https://apps.usos.edu.pl/developers/api/authorization/#scopes
     SCOPES = "|".join(["offline_access", "studies"])
 
     def __init__(self, api_base_address: str, consumer_key: str, consumer_secret: str):
