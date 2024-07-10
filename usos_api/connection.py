@@ -92,7 +92,6 @@ class USOSAPIConnection:
         url, headers, body = self.auth_manager.sign_request(
             "".join(url_parts), headers=headers
         )
-        print(url, headers, body)
         async with self._session.get(url, params=kwargs, headers=headers) as response:
             await self._handle_response_errors(response)
             return await response.json()

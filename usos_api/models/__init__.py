@@ -1,5 +1,21 @@
+from .api_documentation import (
+    APIMethodIndexItem,
+    APIMethodInfo,
+    APIModuleInfo,
+    Argument,
+    AuthOptions,
+    DeprecatedInfo,
+    ResultField,
+    ScopeInfo,
+)
 from .consumer import Consumer
-from .course import Course, CourseAttribute, CourseEdition, CourseEditionConducted
+from .course import (
+    Course,
+    CourseAttribute,
+    CourseEdition,
+    CourseEditionConducted,
+    CourseUnit,
+)
 from .grade import Grade
 from .group import Group
 from .lang_dict import LangDict
@@ -50,4 +66,13 @@ __all__ = [
     "CourseEditionConducted",
     "Term",
     "Consumer",
+    "CourseUnit",
+    "AuthOptions",
+    "Argument",
+    "ResultField",
+    "DeprecatedInfo",
+    "APIMethodInfo",
+    "APIMethodIndexItem",
+    "APIModuleInfo",
+    "ScopeInfo",
 ]

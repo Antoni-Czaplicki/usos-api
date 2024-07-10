@@ -1,10 +1,15 @@
 import json
 
 from .connection import USOSAPIConnection
+from .helper import APIHelper
 from .logger import get_logger
 from .services import UserService
+from .services.api_documentation import APIDocumentationService
 from .services.api_server import APIServerService
+from .services.courses import CourseService
+from .services.grades import GradeService
 from .services.groups import GroupService
+from .services.terms import TermService
 
 _LOGGER = get_logger("USOSClient")
 
@@ -35,7 +40,13 @@ class USOSClient:
         )
         self.user_service = UserService(self.connection)
         self.group_service = GroupService(self.connection)
+        self.course_service = CourseService(self.connection)
+        self.term_service = TermService(self.connection)
+        self.grade_service = GradeService(self.connection)
         self.api_server_service = APIServerService(self.connection)
+        self.api_documentation_service = APIDocumentationService(self.connection)
+
+        self.helper = APIHelper(self)
 
     async def __aenter__(self) -> "USOSClient":
         """

@@ -12,3 +12,10 @@ class Term(BaseModel):
     end_date: date | None = None
     finish_date: date | None = None
     is_active: bool | None = None
+
+    @property
+    def is_current(self) -> bool:
+        """
+        Check if the term is currently active.
+        """
+        return self.is_active and self.start_date <= date.today() <= self.finish_date

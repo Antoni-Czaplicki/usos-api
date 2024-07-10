@@ -39,3 +39,9 @@ Services
    :members:
 
 
+Helper
+^^^^^^
+
+.. autoclass:: usos_api.helper.APIHelper
+   :members:
+   :show-inheritance:

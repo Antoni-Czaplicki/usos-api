@@ -1,6 +1,7 @@
 """ Example of fetching user data from the USOS API. """
 
 import asyncio
+import json
 import os
 
 from dotenv import load_dotenv
@@ -40,11 +41,53 @@ async def fetch_data(api_base_address: str, consumer_key: str, consumer_secret: 
                 ongoing_terms_only=True
             )
             print(groups)
+            print(await client.helper.get_user_end_grades_with_weights())
     except USOSAPIException as e:
         print(f"Error fetching data: {e}")
     finally:
         if client:
             await client.close()
+
+
+async def fetch_documentation(
+    api_base_address: str, consumer_key: str, consumer_secret: str
+):
+    async with USOSClient(api_base_address, consumer_key, consumer_secret) as client:
+        await client.load_access_token_from_file()
+        documentation_service = client.api_documentation_service
+
+        method_index = await documentation_service.get_method_index()
+        modules = set()
+
+        for method in method_index:
+            module = method.name.split("/")[1]
+            modules.add(module)
+
+        modules_info = []
+        for module in modules:
+            print(f"Fetching documentation for module {module}")
+            module_info = await documentation_service.get_module_info(module)
+            module_info = module_info.dict()
+            module_info["methods_info"] = {}
+            for method in module_info["methods"]:
+                print(f"Fetching documentation for method {method}")
+                method_info = await documentation_service.get_method_info(method)
+                module_info["methods_info"][method] = method_info.dict()
+
+            modules_info.append(module_info)
+
+    # Combine fetched data
+    documentation = {
+        "method_index": [method.dict() for method in method_index],
+        "modules": [module for module in modules_info],
+    }
+
+    return documentation
+
+
+async def save_documentation_to_file(file_path, documentation):
+    with open(file_path, "w") as file:
+        json.dump(documentation, file, indent=4)
 
 
 if __name__ == "__main__":
@@ -58,3 +101,5 @@ if __name__ == "__main__":
         )
 
     asyncio.run(fetch_data(api_base_address, consumer_key, consumer_secret))
+    # documentation = asyncio.run(fetch_documentation(api_base_address, consumer_key, consumer_secret))
+    # asyncio.run(save_documentation_to_file("usos_api_documentation.json", documentation))

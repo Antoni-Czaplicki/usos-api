@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, List
+from typing import TYPE_CHECKING
 
 from pydantic import BaseModel
 
@@ -22,8 +22,8 @@ class Group(BaseModel):
     course_fac_id: str | None = None
     course_lang_id: str | None = None
     term_id: str | None = None
-    lecturers: List["User"] | None = None
-    participants: List["User"] | None = None
+    lecturers: list["User"] | None = None
+    participants: list["User"] | None = None
     group_description: LangDict | None = None
     group_literature: LangDict | None = None
     course_learning_outcomes: LangDict | None = None

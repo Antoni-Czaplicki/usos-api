@@ -1,5 +1,3 @@
-from typing import List
-
 from usos_api.models.consumer import Consumer
 
 
@@ -16,7 +14,7 @@ class APIServerService:
         """
         self.connection = connection
 
-    async def get_consumer_info(self, fields: List[str] | None = None) -> Consumer:
+    async def get_consumer_info(self, fields: list[str] | None = None) -> Consumer:
         """
         Get information on the Consumer.
 

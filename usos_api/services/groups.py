@@ -1,5 +1,3 @@
-from datetime import datetime
-
 from ..connection import USOSAPIConnection
 from ..logger import get_logger
 from ..models import Group, Term
@@ -12,11 +10,7 @@ def _filter_ongoing_terms(terms: list[Term]) -> list[Term]:
     :param terms: The terms to filter.
     :return: The ongoing terms.
     """
-    return [
-        term
-        for term in terms
-        if term.start_date <= datetime.today().date() <= term.finish_date
-    ]
+    return [term for term in terms if term.is_current]
 
 
 def _deserialize_term(data: dict) -> Term:
