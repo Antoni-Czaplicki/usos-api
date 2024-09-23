@@ -3,13 +3,16 @@ import json
 from .connection import USOSAPIConnection
 from .helper import APIHelper
 from .logger import get_logger
-from .services import UserService
-from .services.api_documentation import APIDocumentationService
-from .services.api_server import APIServerService
-from .services.courses import CourseService
-from .services.grades import GradeService
-from .services.groups import GroupService
-from .services.terms import TermService
+from .services import (
+    APIDocumentationService,
+    APIServerService,
+    CourseService,
+    GradeService,
+    GroupService,
+    RegistrationService,
+    TermService,
+    UserService,
+)
 
 _LOGGER = get_logger("USOSClient")
 
@@ -21,6 +24,11 @@ class USOSClient:
     :var UserService user_service: The user service.
     :var GroupService group_service: The group service.
     :var APIServerService api_server_service: The API server service.
+    :var APIDocumentationService api_documentation_service: The API documentation service.
+    :var CourseService course_service: The course service.
+    :var TermService term_service: The term service.
+    :var GradeService grade_service: The grade service.
+    :var RegistrationService registration_service: The registration service.
 
     :ivar USOSAPIConnection connection: The connection to the USOS API, used for making requests.
     """
@@ -45,6 +53,7 @@ class USOSClient:
         self.grade_service = GradeService(self.connection)
         self.api_server_service = APIServerService(self.connection)
         self.api_documentation_service = APIDocumentationService(self.connection)
+        self.registration_service = RegistrationService(self.connection)
 
         self.helper = APIHelper(self)
 

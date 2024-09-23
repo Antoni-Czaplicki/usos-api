@@ -20,6 +20,14 @@ from .grade import Grade
 from .group import Group
 from .lang_dict import LangDict
 from .programme import Programme, StudentProgramme
+from .registration import (
+    CoursesCart,
+    Link,
+    Registration,
+    RegistrationCourse,
+    RegistrationRound,
+    Stage,
+)
 from .term import Term
 from .user import (
     EmailAccess,
@@ -75,4 +83,10 @@ __all__ = [
     "APIMethodIndexItem",
     "APIModuleInfo",
     "ScopeInfo",
+    "Registration",
+    "RegistrationRound",
+    "RegistrationCourse",
+    "Stage",
+    "Link",
+    "CoursesCart",
 ]
