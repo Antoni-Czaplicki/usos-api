@@ -10,7 +10,7 @@ def _filter_ongoing_terms(terms: list[Term]) -> list[Term]:
     :param terms: The terms to filter.
     :return: The ongoing terms.
     """
-    return [term for term in terms if term.is_current]
+    return [term for term in terms if term.is_ongoing]
 
 
 def _deserialize_term(data: dict) -> Term:

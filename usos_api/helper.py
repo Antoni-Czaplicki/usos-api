@@ -22,18 +22,9 @@ class APIHelper:
         ects_by_term = await self.client.course_service.get_user_courses_ects()
         terms = await self.client.term_service.get_terms(list(ects_by_term.keys()))
         term_ids = [
-            term.id for term in terms if not current_term_only or term.is_current
-        ]
-        course_ids = [
-            course_id
-            for term_id in term_ids
-            for course_id in ects_by_term[term_id].keys()
+            term.id for term in terms if not current_term_only or term.is_ongoing
         ]
 
-        courses = {
-            course.id: course
-            for course in await self.client.course_service.get_courses(course_ids)
-        }
         grades_by_term = await self.client.grade_service.get_grades_by_terms(term_ids)
 
         user_grades = []
@@ -47,7 +38,7 @@ class APIHelper:
                 for grade in grades:
                     grade.weight = ects
                     grade.course_edition = CourseEdition(
-                        course=courses[course_id], term=term
+                        course_id=course_id, term_id=term.id
                     )
                     user_grades.append(grade)
 

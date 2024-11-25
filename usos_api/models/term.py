@@ -14,7 +14,7 @@ class Term(BaseModel):
     is_active: bool | None = None
 
     @property
-    def is_current(self) -> bool:
+    def is_ongoing(self) -> bool:
         """
         Check if the term is currently active.
         """

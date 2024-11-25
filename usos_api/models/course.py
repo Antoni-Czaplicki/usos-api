@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Optional
+from typing import TYPE_CHECKING, Any, Optional
 
 from pydantic import BaseModel
 
@@ -65,13 +65,23 @@ class CourseEdition(BaseModel):
     Class representing a course edition.
     """
 
-    course: Course | None = None
-    term: Term | None = None
+    course_id: str | None = None
+    course_name: LangDict | None = None
+    term_id: str | None = None
     homepage_url: str | None = None
+    profile_url: str | None = None
+    coordinators: list[dict[str, Any]] | None = None
+    lecturers: list[dict[str, Any]] | None = None
+    passing_status: str | None = None  # passed, failed, not_yet_passed
+    user_groups: list[Group] | None = None
+
     description: LangDict | None = None
     bibliography: LangDict | None = None
     notes: LangDict | None = None
-    course_units: list[CourseUnit] | None = None
+    course_units_ids: list[str] | None = None
+    participants: list[dict[str, Any]] | None = None
+    grades: list[dict[str, Any]] | None = None
+    attributes: list[dict[str, list[LangDict]]] | None = None
 
 
 class CourseEditionConducted(BaseModel):

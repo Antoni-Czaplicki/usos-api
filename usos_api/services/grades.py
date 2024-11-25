@@ -84,6 +84,7 @@ class GradeService:
                 exam_session_number: Grade(**grade)
                 for unit in units
                 for exam_session_number, grade in unit.items()
+                if grade
             }
         return processed_units_grades
 
@@ -95,5 +96,8 @@ class GradeService:
         :return: The processed course grades.
         """
         return [
-            Grade(**grade) for session in course_grades for grade in session.values()
+            Grade(**grade)
+            for session in course_grades
+            for grade in session.values()
+            if grade
         ]
