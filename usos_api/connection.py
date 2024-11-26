@@ -15,19 +15,27 @@ class USOSAPIConnection:
     A connection to the USOS API.
     """
 
-    def __init__(self, api_base_address: str, consumer_key: str, consumer_secret: str):
+    def __init__(
+        self,
+        api_base_address: str,
+        consumer_key: str,
+        consumer_secret: str,
+        trust_env: bool = False,
+    ):
         """
         Initialize the USOS API connection.
 
         :param api_base_address: The base address of the USOS API.
         :param consumer_key: Consumer key obtained from the USOS API.
         :param consumer_secret: Consumer secret obtained from the USOS API.
+        :param trust_env: Whether to trust the environment variables for the connection, see https://docs.aiohttp.org/en/stable/client_reference.html#aiohttp.ClientSession for more information.
         """
         self.base_address = api_base_address.rstrip("/") + "/"
         self.auth_manager = AuthManager(
-            self.base_address, consumer_key, consumer_secret
+            self.base_address, consumer_key, consumer_secret, trust_env
         )
         self._session = None
+        self.trust_env = trust_env
 
     async def __aenter__(self) -> "USOSAPIConnection":
         """
@@ -52,7 +60,7 @@ class USOSAPIConnection:
         """
         Open the connection.
         """
-        self._session = aiohttp.ClientSession()
+        self._session = aiohttp.ClientSession(trust_env=self.trust_env)
         await self.auth_manager.open()
 
     async def close(self):

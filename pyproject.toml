@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "usos-api"
-version = "0.3.1"
+version = "0.3.2"
 description = "Asynchronous USOS API for Python"
 authors = ["Antoni-Czaplicki <56671347+Antoni-Czaplicki@users.noreply.github.com>"]
 readme = "README.md"

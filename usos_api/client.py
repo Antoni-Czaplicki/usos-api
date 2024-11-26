@@ -34,7 +34,11 @@ class USOSClient:
     """
 
     def __init__(
-        self, api_base_address: str, consumer_key: str, consumer_secret: str
+        self,
+        api_base_address: str,
+        consumer_key: str,
+        consumer_secret: str,
+        trust_env: bool = False,
     ) -> None:
         """
         Initialize the USOS API client.
@@ -42,9 +46,10 @@ class USOSClient:
         :param api_base_address: The base address of the USOS API.
         :param consumer_key: Consumer key obtained from the USOS API.
         :param consumer_secret: Consumer secret obtained from the USOS API.
+        :param trust_env: Whether to trust the environment variables for the connection, see https://docs.aiohttp.org/en/stable/client_reference.html#aiohttp.ClientSession for more information.
         """
         self.connection = USOSAPIConnection(
-            api_base_address, consumer_key, consumer_secret
+            api_base_address, consumer_key, consumer_secret, trust_env
         )
         self.user_service = UserService(self.connection)
         self.group_service = GroupService(self.connection)

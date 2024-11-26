@@ -21,13 +21,20 @@ class AuthManager:
     # List of available scopes can be found at https://apps.usos.edu.pl/developers/api/authorization/#scopes
     SCOPES = "|".join(["offline_access", "studies"])
 
-    def __init__(self, api_base_address: str, consumer_key: str, consumer_secret: str):
+    def __init__(
+        self,
+        api_base_address: str,
+        consumer_key: str,
+        consumer_secret: str,
+        trust_env: bool = False,
+    ):
         """
         Initialize the authentication manager.
 
         :param api_base_address: The base address of the USOS API.
         :param consumer_key: Consumer key obtained from the USOS API.
         :param consumer_secret: Consumer secret obtained from the USOS API.
+        :param trust_env: Whether to trust the environment variables for the connection, see https://docs.aiohttp.org/en/stable/client_reference.html#aiohttp.ClientSession for more information.
         """
         self.base_address = api_base_address.rstrip("/") + "/"
         self.consumer_key = consumer_key
@@ -35,6 +42,7 @@ class AuthManager:
         self.access_token = None
         self.access_token_secret = None
         self._session = None
+        self.trust_env = trust_env
         self._oauth_client = Client(consumer_key, consumer_secret)
 
     async def __aenter__(self) -> "AuthManager":
@@ -60,7 +68,7 @@ class AuthManager:
         """
         Open the manager.
         """
-        self._session = aiohttp.ClientSession()
+        self._session = aiohttp.ClientSession(trust_env=self.trust_env)
 
     async def close(self):
         """
