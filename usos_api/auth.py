@@ -101,7 +101,7 @@ class AuthManager:
             self._request_token_secret = data["oauth_token_secret"]
             self._oauth_client.resource_owner_key = self._request_token
             self._oauth_client.resource_owner_secret = self._request_token_secret
-            _LOGGER.info(f"New request token generated: {self._request_token}")
+            _LOGGER.debug(f"New request token generated")
 
     async def get_authorization_url(
         self, callback_url: str, confirm_user: bool = False
@@ -139,8 +139,8 @@ class AuthManager:
                 await self._handle_response_errors(response)
                 data = dict(urllib.parse.parse_qsl(await response.text()))
                 self.load_access_token(data["oauth_token"], data["oauth_token_secret"])
-                _LOGGER.info(
-                    f"Authorization successful, received access token: {self.access_token}"
+                _LOGGER.debug(
+                    f"Authorization successful, received access token"
                 )
                 return self.access_token, self.access_token_secret
         except AttributeError as e:
