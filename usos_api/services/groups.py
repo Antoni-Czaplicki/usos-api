@@ -37,7 +37,7 @@ class GroupService:
         self.logger = get_logger("GroupService")
 
     async def get_groups_by_ids(
-        self, group_ids: list[tuple[str, int]], fields: list[str] = None
+        self, group_ids: list[tuple[str, str]], fields: list[str] = None
     ) -> list[Group]:
         """
         Get groups by their IDs.
@@ -56,8 +56,35 @@ class GroupService:
             fields.append("group_number")
         fields = "|".join(fields)
         response = await self.connection.post(
-            "services/groups/groups", group_id=group_ids, fields=fields
+            "services/groups/groups", group_ids=group_ids, fields=fields
         )
+        return [_deserialize_group(group) for group in response.values()]
+
+
+    async def get_group_by_id(
+        self, group_id: str, course_unit_id: str, fields: list[str] = None
+    ) -> list[Group]:
+        """
+        Get group by their ID.
+
+        :param group_id: The ID of the groups to get.
+        :param course_unit_id: The ID of the course unit.
+        :param fields: The fields to include in the response.
+        :return: A dictionary of group IDs to groups.
+        """
+        if not group_id or not course_unit_id:
+            return []
+        if not fields:
+            fields = ["course_unit_id", "group_number", "course_name","participants"]
+        if "course_unit_id" not in fields:
+            fields.append("course_unit_id")
+        if "group_number" not in fields:
+            fields.append("group_number")
+        fields = "|".join(fields)
+        response = await self.connection.post(
+            "services/groups/group", group_number=group_id, course_unit_id=course_unit_id, fields=fields
+        )
+        print(response)
         return [_deserialize_group(group) for group in response.values()]
 
     async def get_groups_for_lecturer(
