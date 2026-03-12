@@ -17,7 +17,7 @@ class CourseService:
         """
         self.connection = connection
 
-    async def get_user_courses_ects(self) -> dict[str, dict[str, float]]:
+    async def get_user_courses_ects(self) -> dict[str, dict[str, Optional[float]]]:
         """
         Get user courses ECTS.
 
@@ -25,7 +25,10 @@ class CourseService:
         """
         response = await self.connection.post("services/courses/user_ects_points")
         return {
-            term: {course: float(points) for course, points in courses.items()}
+            term: {
+                course: float(points) if points is not None else None
+                for course, points in courses.items()
+            }
             for term, courses in response.items()
         }
 

@@ -19,6 +19,8 @@ python-dotenv = "^1.0"
 black = "*"
 isort = "*"
 ruff = "*"
+pytest = "*"
+pytest-asyncio = "*"
 
 [tool.poetry.group.docs]
 optional = true
