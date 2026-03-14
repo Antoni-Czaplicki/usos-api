@@ -60,7 +60,6 @@ class GroupService:
         )
         return [_deserialize_group(group) for group in response.values()]
 
-
     async def get_group_by_id(
         self, group_id: str, course_unit_id: str, fields: list[str] = None
     ) -> list[Group]:
@@ -75,14 +74,17 @@ class GroupService:
         if not group_id or not course_unit_id:
             return []
         if not fields:
-            fields = ["course_unit_id", "group_number", "course_name","participants"]
+            fields = ["course_unit_id", "group_number", "course_name", "participants"]
         if "course_unit_id" not in fields:
             fields.append("course_unit_id")
         if "group_number" not in fields:
             fields.append("group_number")
         fields = "|".join(fields)
         response = await self.connection.post(
-            "services/groups/group", group_number=group_id, course_unit_id=course_unit_id, fields=fields
+            "services/groups/group",
+            group_number=group_id,
+            course_unit_id=course_unit_id,
+            fields=fields,
         )
         print(response)
         return [_deserialize_group(group) for group in response.values()]
