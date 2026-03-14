@@ -1,34 +1,37 @@
-[tool.poetry]
+[project]
 name = "usos-api"
-version = "0.3.3"
+version = "0.3.4"
 description = "Asynchronous USOS API for Python"
-authors = ["Antoni-Czaplicki <56671347+Antoni-Czaplicki@users.noreply.github.com>"]
+authors = [
+  { name = "Antoni-Czaplicki", email = "56671347+Antoni-Czaplicki@users.noreply.github.com" }
+]
 readme = "README.md"
-homepage = "https://github.com/Antoni-Czaplicki/usos-api"
-repository = "https://github.com/Antoni-Czaplicki/usos-api"
-documentation = "https://usos-api.readthedocs.io"
+requires-python = ">=3.10"
+dependencies = [
+    "aiohttp==3.13.3",
+    "oauthlib>=3.3",
+    "pydantic>=2.12",
+    "python-dotenv>=1.2"
+]
 
-[tool.poetry.dependencies]
-python = "^3.10"
-aiohttp = "^3.11"
-pydantic = "^2.10"
-oauthlib = "^3.2"
-python-dotenv = "^1.0"
+[project.urls]
+Homepage = "https://github.com/Antoni-Czaplicki/usos-api"
+Repository = "https://github.com/Antoni-Czaplicki/usos-api"
+Documentation = "https://usos-api.readthedocs.io"
 
-[tool.poetry.group.dev.dependencies]
-black = "*"
-isort = "*"
-ruff = "*"
-
-[tool.poetry.group.docs]
-optional = true
-
-[tool.poetry.group.docs.dependencies]
-sphinx = "*"
-sphinx_rtd_theme = "*"
-readthedocs-sphinx-search = "*"
-sphinx-autodoc-typehints = "*"
+[dependency-groups]
+dev = [
+    "black",
+    "isort",
+    "ruff"
+]
+docs = [
+    "readthedocs-sphinx-search",
+    "sphinx",
+    "sphinx-autodoc-typehints",
+    "sphinx-rtd-theme"
+]
 
 [build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+requires = ["hatchling"]
+build-backend = "hatchling.build"
