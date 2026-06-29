@@ -1,7 +1,20 @@
-from typing import Optional
+from typing import Optional, TypeAlias, TypedDict
 
 from ..connection import USOSAPIConnection
 from ..models import Course, CourseEdition, Term
+
+
+class LangDictData(TypedDict, total=False):
+    pl: str | None
+    en: str | None
+
+
+class CourseClassTypeDescription(TypedDict, total=False):
+    name: LangDictData
+
+
+CourseClassTypesIndex: TypeAlias = dict[str, CourseClassTypeDescription]
+CourseEctsByTerm: TypeAlias = dict[str, dict[str, float | None]]
 
 
 class CourseService:
@@ -17,7 +30,7 @@ class CourseService:
         """
         self.connection = connection
 
-    async def get_user_courses_ects(self) -> dict[str, dict[str, Optional[float]]]:
+    async def get_user_courses_ects(self) -> CourseEctsByTerm:
         """
         Get user courses ECTS.
 
@@ -85,3 +98,11 @@ class CourseService:
             if not ongoing_terms_only or term_id in ongoing_terms
             for course_edition in course_editions
         ]
+
+    async def get_class_types_index(self) -> CourseClassTypesIndex:
+        """
+        Get class type descriptions indexed by class type ID.
+
+        :return: A dictionary mapping class type IDs to class type descriptions.
+        """
+        return await self.connection.post("services/courses/classtypes_index")

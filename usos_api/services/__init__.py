@@ -1,6 +1,7 @@
 from .api_documentation import APIDocumentationService
 from .api_server import APIServerService
 from .courses import CourseService
+from .exam_reports import ExamReportService
 from .grades import GradeService
 from .groups import GroupService
 from .registrations import RegistrationService
@@ -11,6 +12,7 @@ __all__ = [
     "APIDocumentationService",
     "APIServerService",
     "CourseService",
+    "ExamReportService",
     "GradeService",
     "GroupService",
     "TermService",

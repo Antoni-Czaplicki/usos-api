@@ -7,6 +7,7 @@ from .services import (
     APIDocumentationService,
     APIServerService,
     CourseService,
+    ExamReportService,
     GradeService,
     GroupService,
     RegistrationService,
@@ -28,6 +29,7 @@ class USOSClient:
     :var CourseService course_service: The course service.
     :var TermService term_service: The term service.
     :var GradeService grade_service: The grade service.
+    :var ExamReportService exam_report_service: The exam report service.
     :var RegistrationService registration_service: The registration service.
 
     :ivar USOSAPIConnection connection: The connection to the USOS API, used for making requests.
@@ -56,6 +58,7 @@ class USOSClient:
         self.course_service = CourseService(self.connection)
         self.term_service = TermService(self.connection)
         self.grade_service = GradeService(self.connection)
+        self.exam_report_service = ExamReportService(self.connection)
         self.api_server_service = APIServerService(self.connection)
         self.api_documentation_service = APIDocumentationService(self.connection)
         self.registration_service = RegistrationService(self.connection)
