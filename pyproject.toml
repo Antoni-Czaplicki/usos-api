@@ -1,6 +1,6 @@
 [project]
 name = "usos-api"
-version = "0.4.0"
+version = "0.4.1"
 description = "Asynchronous USOS API for Python"
 authors = [
   { name = "Antoni-Czaplicki", email = "56671347+Antoni-Czaplicki@users.noreply.github.com" }

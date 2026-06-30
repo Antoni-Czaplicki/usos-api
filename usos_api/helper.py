@@ -1,8 +1,7 @@
 from typing import TYPE_CHECKING, List
 
-from usos_api.models import CourseEdition, Grade
+from usos_api.models import CourseEdition, Grade, UserExamReportsByTerm
 from usos_api.services.courses import CourseEctsByTerm
-from usos_api.services.exam_reports import UserExamReportsByTerm
 
 if TYPE_CHECKING:
     from usos_api import USOSClient
