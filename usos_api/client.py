@@ -10,6 +10,7 @@ from .services import (
     ExamReportService,
     GradeService,
     GroupService,
+    ProgrammeService,
     RegistrationService,
     TermService,
     UserService,
@@ -31,6 +32,7 @@ class USOSClient:
     :var GradeService grade_service: The grade service.
     :var ExamReportService exam_report_service: The exam report service.
     :var RegistrationService registration_service: The registration service.
+    :var ProgrammeService programme_service: The programme service.
 
     :ivar USOSAPIConnection connection: The connection to the USOS API, used for making requests.
     """
@@ -62,6 +64,7 @@ class USOSClient:
         self.api_server_service = APIServerService(self.connection)
         self.api_documentation_service = APIDocumentationService(self.connection)
         self.registration_service = RegistrationService(self.connection)
+        self.programme_service = ProgrammeService(self.connection)
 
         self.helper = APIHelper(self)
 

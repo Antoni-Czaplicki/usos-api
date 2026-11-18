@@ -44,7 +44,7 @@ from .exam_report import (
 from .grade import Grade
 from .group import Group
 from .lang_dict import LangDict
-from .programme import Programme, StudentProgramme
+from .programme import Faculty, Programme, ProgrammeStage, StudentProgramme
 from .registration import (
     CoursesCart,
     Link,
@@ -89,6 +89,8 @@ __all__ = [
     "ExternalIds",
     "StudentProgramme",
     "Programme",
+    "ProgrammeStage",
+    "Faculty",
     "Sex",
     "LangDict",
     "CourseAttribute",
